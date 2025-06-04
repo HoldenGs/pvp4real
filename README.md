@@ -27,7 +27,7 @@ git clone https://github.com/pengzhenghao/pvp4real
 cd pvp4real
 
 # Create Conda environment
-conda create -n pvp4real python=3.7
+conda create -n pvp4real python=3.9
 conda activate pvp4real
 
 # Install dependencies
