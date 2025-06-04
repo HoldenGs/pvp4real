@@ -67,6 +67,7 @@ class HumanInTheLoopEnv(SafeMetaDriveEnv):
 
     def _get_step_return(self, actions, engine_info):
         """Compute takeover cost here."""
+        # (next obs, rewards, termination flag, cost flag, engine_info dict)
         o, r, tm, tc, engine_info = super(HumanInTheLoopEnv, self)._get_step_return(actions, engine_info)
         d = tm or tc
 

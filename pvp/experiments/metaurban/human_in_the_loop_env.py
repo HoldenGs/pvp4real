@@ -39,6 +39,10 @@ HUMAN_IN_THE_LOOP_ENV_CONFIG = {
     "only_takeover_start_cost": False,
 
     # Visualize
+    """
+    TODO: I get the following error from the below
+    [WARNING] show_dest_mark and show_line_to_dest are not supported in ORCATrajectoryNavigation (orca_navigation.py:73)
+    """
     "vehicle_config": {
         "show_dest_mark": True,
         "show_line_to_dest": True,
@@ -69,9 +73,13 @@ class HumanInTheLoopEnv(SidewalkStaticMetaUrbanEnv):
     agent_action = None
     in_pause = False
     start_time = time.time()
+    
+    def __init__(self, config=None, *args, **kwargs):
+        super(HumanInTheLoopEnv, self).__init__(config, *args, **kwargs)
+        self.episode_native_cost = 0  # MetaUrban's _get_step_return does not provide this field so we compute it manually
 
     def default_config(self):
-        cfg = super().default_config()
+        cfg = super(HumanInTheLoopEnv, self).default_config()
         # Merge with HUMAN_IN_THE_LOOP_ENV_CONFIG, allowing new keys
         cfg.update(HUMAN_IN_THE_LOOP_ENV_CONFIG, allow_add_new_key=True)
         return cfg
@@ -80,8 +88,10 @@ class HumanInTheLoopEnv(SidewalkStaticMetaUrbanEnv):
         # Reset takeover flags before resetting the env
         self.takeover = False
         self.agent_action = None
-        obs, info = super().reset(*args, **kwargs)
+        # Reset manual accumualted cost
+        self.episode_native_cost = 0
         # MetaUrban’s reset returns (obs, info) by default (Gymv26 style). We discard “info” here for legacy code.
+        obs, info = super(HumanInTheLoopEnv, self).reset(*args, **kwargs)
         return obs
 
     def _get_step_return(self, actions, engine_info):
@@ -90,21 +100,18 @@ class HumanInTheLoopEnv(SidewalkStaticMetaUrbanEnv):
         We override to (a) compute takeover cost, (b) stamp takeover flags into engine_info,
         (c) accumulate total cost / takeover counts.
         """
-        # Step up the chain: MetaUrban’s static "_get_step_return" returns:
         # (obs, reward, termination_mask, cost_mask, engine_info)
-        o, r, done_mask, cost_mask, engine_info = super()._get_step_return(actions, engine_info)
-        # In MetaDrive you did “tm or tc”. Here, MetaUrban also packs termination_mask (True if done)
-        d = done_mask or cost_mask
+        o, r, done_mask, cost_mask, engine_info = super(HumanInTheLoopEnv, self)._get_step_return(actions, engine_info)
+        d = done_mask or cost_mask  # termination_mask or cost_mask
 
-        # --- Figure out if the takeover just started this step ---
+        # Figure out if the takeover just started this step
         shared_control_policy = self.engine.get_policy(self.agent.id)
         last_t = self.takeover
         self.takeover = getattr(shared_control_policy, "takeover", False)
-
         engine_info["takeover_start"] = (not last_t) and self.takeover
         engine_info["takeover"] = self.takeover
 
-        # --- Decide whether to charge takeover_cost this step ---
+        # Decide whether to charge takeover_cost this step
         condition = engine_info["takeover_start"] if self.config["only_takeover_start_cost"] else self.takeover
         if not condition:
             engine_info["takeover_cost"] = 0
@@ -112,15 +119,21 @@ class HumanInTheLoopEnv(SidewalkStaticMetaUrbanEnv):
             cost = self.get_takeover_cost(engine_info)
             self.total_takeover_cost += cost
             engine_info["takeover_cost"] = cost
-
-        # --- Stamp cumulative fields into info dict ---
         engine_info["total_takeover_cost"] = self.total_takeover_cost
-        engine_info["native_cost"] = engine_info.get("cost", 0)
-        engine_info["episode_native_cost"] = self.episode_cost
-        self.total_cost += engine_info.get("cost", 0)
+
+        # Write cumulative fields into info dict
+        native_cost = engine_info["cost"]
+        
+        # Episode local costs
+        self.episode_native_cost += native_cost
+        engine_info["native_cost"] = native_cost
+        engine_info["episode_native_cost"] = self.episode_native_cost
+        
+        # Global costs
+        self.total_cost += native_cost
         engine_info["total_cost"] = self.total_cost
 
-        return o, r, d, engine_info
+        return o, r, done_mask, cost_mask, engine_info
 
     def _is_out_of_road(self, vehicle):
         """
@@ -144,7 +157,7 @@ class HumanInTheLoopEnv(SidewalkStaticMetaUrbanEnv):
         self.agent_action = copy.copy(actions)
         ret = super().step(actions)
 
-        # If we are paused by “e”, run the engine until unpaused
+        # Pause logic: if paused by “e”, run the engine until unpaused
         while self.in_pause:
             self.engine.taskMgr.step()
 
@@ -206,7 +219,10 @@ if __name__ == "__main__":
     #     "use_render": True,
     # })
     env.reset()
+    # i = 0
     while True:
-        x, _, done, _ = env.step([0, 0])
-        if done:
+        obs, rewards, terminateds, truncateds, step_infos = env.step([0, 0])
+        # print(f"step {i}: {step_infos}\n")
+        # i += 1
+        if terminateds:
             env.reset()
