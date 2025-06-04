@@ -12,52 +12,42 @@ import numpy as np
 # Also includes TakeoverPolicyWithoutBrake, TODO: which to select?
 from metaurban.engine.core.onscreen_message import ScreenMessage
 from metaurban.envs import SidewalkStaticMetaUrbanEnv
-from metaurban.policy.manual_control_policy import TakeoverPolicy 
+from metaurban.policy.manual_control_policy import TakeoverPolicyWithoutBrake
 from metaurban.utils.math import safe_clip
 
-ScreenMessage.SCALE = 0.1  # same as MetaDrive—controls on‐screen HUD scale
+ScreenMessage.SCALE = 0.1  # same as MetaDrive on-screen HUD scale
 
-# ------------------------------------------------------------------------------
-# This dictionary was originally for MetaDrive’s SafeMetaDriveEnv.
-# We copy it and then adapt every key that is MetaDrive‐only into the MetaUrban analog.
-# ------------------------------------------------------------------------------
 HUMAN_IN_THE_LOOP_ENV_CONFIG = {
-    #—ENVIRONMENT‐LEVEL SETTINGS—
-    "out_of_route_done": True,       # same meaning in MetaUrban
-    "num_scenarios": 50,             # “50 possible maps” → okay in MetaUrban 
-    "start_seed": 100,               # seeds [100, 149] will be used for training
-    # In MetaDrive you had “traffic_density”; MetaUrban static env does NOT use traffic_density.
-    # Instead MetaUrban has object_density (objects on sidewalk/road) + crswalk_density (crosswalk agents).
-    # If you want traffic‐heavy, raise object_density; we'll leave both here and you can tune:
-    "object_density": 0.2,         # ADJUST as needed; like “traffic_density=0.06” in MetaDrive
-    "crswalk_density": 1,          # probability of crosswalk/pedestrians
-    # If you want entirely zero moving traffic, set max dynamic elements to 0. But MetaUrban Static
-    # will still spawn “traffic vehicles” in some form. Fine for now.
+    # Environment setting:
+    "out_of_route_done": True,  # Raise done if out of route.
+    "num_scenarios": 50,  # There are totally 50 possible maps.
+    "start_seed": 100,  # We will use the map 100~150 as the default training environment.
+    # MetaDrive used “traffic_density" but MetaUrban static env does NOT use traffic_density.:
+    "object_density": 0.2,
+    "crswalk_density": 1,  # Should only be for dynamic environment
 
-    #—REWARD & COST SETTINGS—
+    # Reward and cost setting:    "cost_to_reward": True,  # Cost will be negated and added to the reward. Useless in PVP.
     # MetaUrban’s cost terms have identical names to MetaDrive’s Safe env (in MetaUrban’s code base,
     # they ship crash_vehicle_cost, out_of_route_cost, etc.). We’ll leave these as a basis to toggle later.
     "cost_to_reward": True,         # ADJUST: if MetaUrban’s static env uses same key
     "cos_similarity": False,        # If True, use cos–similarity takeover cost (same logic)
 
-    #—CONTROL / TAKEOVER SETTINGS—
+    # Set up the control device. Default to use keyboard with the pop-up interface.
     "manual_control": True,
-    "agent_policy": TakeoverPolicy,    # exactly as MetaDrive: “TakeoverPolicy” but from MetaUrban
+    "agent_policy": TakeoverPolicyWithoutBrake,
     "controller": "keyboard",          # [keyboard, xbox, steering_wheel]
+    "only_takeover_start_cost": False,
 
-    "only_takeover_start_cost": False, # same semantic as MetaDrive
-
-    #—VISUALIZATION (VEHICLE‐LEVEL)—
+    # Visualize
     "vehicle_config": {
         "show_dest_mark": True,
         "show_line_to_dest": True,
         "show_line_to_navi_mark": True,
     },
-
-    #—TIMING & TERMINATION—
     "horizon": 1500,
+    
     # MetaUrban Static env will default to crash_vehicle_done=True, crash_object_done=True, etc.
-    # We want “Safe mode” → so override to keep episode alive on crash:
+    # To write a "safe mode" we override to keep episode alive on crash:
     "crash_vehicle_done": False,
     "crash_object_done": False,
     "crash_building_done": False,
@@ -67,11 +57,9 @@ HUMAN_IN_THE_LOOP_ENV_CONFIG = {
 
 class HumanInTheLoopEnv(SidewalkStaticMetaUrbanEnv):
     """
-    Human‐in‐the‐loop Env Wrapper for MetaUrban’s static (sidewalk + objects) Env.
-    Mimics all of SafeMetaDriveEnv’s functionality: logs takeover, adds takeover cost, HUD info.
+    Human-in-the-loop Env Wrapper for the static sidewalk environment in MetaUrban.
+    Add code for computing takeover cost and add information to the interface.
     """
-
-    # class‐level accumulators (exactly as in your MetaDrive wrapper)
     total_steps = 0
     total_takeover_cost = 0
     total_takeover_count = 0
@@ -102,7 +90,7 @@ class HumanInTheLoopEnv(SidewalkStaticMetaUrbanEnv):
         We override to (a) compute takeover cost, (b) stamp takeover flags into engine_info,
         (c) accumulate total cost / takeover counts.
         """
-        # Step up the chain: MetaUrban’s static “_get_step_return” returns:
+        # Step up the chain: MetaUrban’s static "_get_step_return" returns:
         # (obs, reward, termination_mask, cost_mask, engine_info)
         o, r, done_mask, cost_mask, engine_info = super()._get_step_return(actions, engine_info)
         # In MetaDrive you did “tm or tc”. Here, MetaUrban also packs termination_mask (True if done)
@@ -137,7 +125,7 @@ class HumanInTheLoopEnv(SidewalkStaticMetaUrbanEnv):
     def _is_out_of_road(self, vehicle):
         """
         In MetaDrive you overrode out_of_road to include sidewalk & on_lane tests.
-        In MetaUrban, we simply trust MetaUrban’s built‐in _is_out_of_road. But if you need
+        In MetaUrban, we simply trust MetaUrban's built-in _is_out_of_road. But if you need
         “crash_sidewalk” logic, you can reimplement here.
         """
         ret = (not vehicle.on_lane) or vehicle.crash_sidewalk
@@ -192,7 +180,7 @@ class HumanInTheLoopEnv(SidewalkStaticMetaUrbanEnv):
     def get_takeover_cost(self, info):
         """
         If cos_similarity=False: always return cost=1.
-        Otherwise: compute 1 – cosine_similarity(raw_action, agent_action).
+        Otherwise: compute 1 - cosine_similarity(raw_action, agent_action).
         """
         if not self.config["cos_similarity"]:
             return 1
@@ -210,11 +198,15 @@ class HumanInTheLoopEnv(SidewalkStaticMetaUrbanEnv):
 if __name__ == "__main__":
     # Same unit test as MetaDrive experiments
     env = HumanInTheLoopEnv({
-        "manual_control": True,
-        "use_render": True,
+        "manual_control": False,
+        "use_render": False,
     })
+    # env = HumanInTheLoopEnv({
+    #     "manual_control": True,
+    #     "use_render": True,
+    # })
     env.reset()
     while True:
-        _, _, done, _ = env.step([0, 0])
+        x, _, done, _ = env.step([0, 0])
         if done:
             env.reset()

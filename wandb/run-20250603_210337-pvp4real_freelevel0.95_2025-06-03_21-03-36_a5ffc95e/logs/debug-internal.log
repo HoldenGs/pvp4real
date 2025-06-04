@@ -1,0 +1,12 @@
+{"time":"2025-06-03T21:03:37.97611058-07:00","level":"INFO","msg":"stream: starting","core version":"0.20.0","symlink path":"/home/rathul/pvp4real/wandb/run-20250603_210337-pvp4real_freelevel0.95_2025-06-03_21-03-36_a5ffc95e/logs/debug-core.log"}
+{"time":"2025-06-03T21:03:38.179816384-07:00","level":"INFO","msg":"stream: created new stream","id":"pvp4real_freelevel0.95_2025-06-03_21-03-36_a5ffc95e"}
+{"time":"2025-06-03T21:03:38.179862763-07:00","level":"INFO","msg":"stream: started","id":"pvp4real_freelevel0.95_2025-06-03_21-03-36_a5ffc95e"}
+{"time":"2025-06-03T21:03:38.179931013-07:00","level":"INFO","msg":"writer: Do: started","stream_id":"pvp4real_freelevel0.95_2025-06-03_21-03-36_a5ffc95e"}
+{"time":"2025-06-03T21:03:38.179980072-07:00","level":"INFO","msg":"sender: started","stream_id":"pvp4real_freelevel0.95_2025-06-03_21-03-36_a5ffc95e"}
+{"time":"2025-06-03T21:03:38.180121031-07:00","level":"INFO","msg":"handler: started","stream_id":"pvp4real_freelevel0.95_2025-06-03_21-03-36_a5ffc95e"}
+{"time":"2025-06-03T21:03:38.373954537-07:00","level":"INFO","msg":"stream: closing","id":"pvp4real_freelevel0.95_2025-06-03_21-03-36_a5ffc95e"}
+{"time":"2025-06-03T21:03:38.747063163-07:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-06-03T21:03:38.747149742-07:00","level":"INFO","msg":"handler: closed","stream_id":"pvp4real_freelevel0.95_2025-06-03_21-03-36_a5ffc95e"}
+{"time":"2025-06-03T21:03:38.747187212-07:00","level":"INFO","msg":"writer: Close: closed","stream_id":"pvp4real_freelevel0.95_2025-06-03_21-03-36_a5ffc95e"}
+{"time":"2025-06-03T21:03:38.747203912-07:00","level":"INFO","msg":"sender: closed","stream_id":"pvp4real_freelevel0.95_2025-06-03_21-03-36_a5ffc95e"}
+{"time":"2025-06-03T21:03:38.750483598-07:00","level":"INFO","msg":"stream: closed","id":"pvp4real_freelevel0.95_2025-06-03_21-03-36_a5ffc95e"}

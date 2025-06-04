@@ -151,9 +151,13 @@ class HumanInTheLoopEnv(SafeMetaDriveEnv):
 
 if __name__ == "__main__":
     env = HumanInTheLoopEnv({
-        "manual_control": True,
-        "use_render": True,
+        "manual_control": False,
+        "use_render": False,
     })
+    # env = HumanInTheLoopEnv({
+    #     "manual_control": True,
+    #     "use_render": True,
+    # })
     env.reset()
     while True:
         _, _, done, _ = env.step([0, 0])
