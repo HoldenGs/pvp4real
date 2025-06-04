@@ -6,11 +6,14 @@ from collections import deque
 
 import numpy as np
 
-# === Imports changed to MetaUrban equivalents ===
+# https://github.com/metadriverse/metaurban/blob/9f937640ce01a169dc2af46c7e7f8cc6c9bef00e/metaurban/engine/core/onscreen_message.py#L9
+# https://github.com/metadriverse/metaurban/blob/9f937640ce01a169dc2af46c7e7f8cc6c9bef00e/metaurban/envs/sidewalk_static_env.py#L111
+# https://github.com/metadriverse/metaurban/blob/9f937640ce01a169dc2af46c7e7f8cc6c9bef00e/metaurban/policy/manual_control_policy.py#L114
+# Also includes TakeoverPolicyWithoutBrake, TODO: which to select?
 from metaurban.engine.core.onscreen_message import ScreenMessage
-from metaurban.envs import SidewalkStaticMetaUrbanEnv  # <— MetaUrban base class
-from metaurban.policy.manual_control_policy import TakeoverPolicy  # <— MetaUrban’s manual‐control
-from metaurban.utils.math import safe_clip  # <— check that this helper exists; if not, copy from MetaDrive
+from metaurban.envs import SidewalkStaticMetaUrbanEnv
+from metaurban.policy.manual_control_policy import TakeoverPolicy 
+from metaurban.utils.math import safe_clip
 
 ScreenMessage.SCALE = 0.1  # same as MetaDrive—controls on‐screen HUD scale
 
@@ -205,6 +208,7 @@ class HumanInTheLoopEnv(SidewalkStaticMetaUrbanEnv):
 
 
 if __name__ == "__main__":
+    # Same unit test as MetaDrive experiments
     env = HumanInTheLoopEnv({
         "manual_control": True,
         "use_render": True,

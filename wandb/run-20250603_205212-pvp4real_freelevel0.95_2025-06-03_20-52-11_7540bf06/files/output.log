@@ -1,0 +1,378 @@
+Logging code at:  /home/rathul/pvp4real/pvp
+Using cuda device
+Wrapping the env in a DummyVecEnv.
+Logging to logs/runs/pvp4real_freelevel0.95/pvp4real_freelevel0.95_2025-06-03_20-52-11_7540bf06/pvp4real_freelevel0.95_1
+-------------------------------------------------
+| rollout/                       |              |
+|    acceleration_mean           | 0.0324       |
+|    action_mean                 | -0.005237162 |
+|    arrive_dest_mean            | 0            |
+|    cost_mean                   | 1            |
+|    crash_building_mean         | 0            |
+|    crash_human_mean            | 0            |
+|    crash_mean                  | 0            |
+|    crash_object_mean           | 0            |
+|    crash_sidewalk_mean         | 0            |
+|    crash_vehicle_mean          | 0            |
+|    env_seed_mean               | 118          |
+|    ep_acceleration_mean        | 0.363        |
+|    ep_action_mean              | 0.16         |
+|    ep_arrive_dest_mean         | 0            |
+|    ep_cost_mean                | 0.0355       |
+|    ep_crash_building_mean      | 0            |
+|    ep_crash_human_mean         | 0            |
+|    ep_crash_mean               | 0.0323       |
+|    ep_crash_object_mean        | 0            |
+|    ep_crash_sidewalk_mean      | 0            |
+|    ep_crash_vehicle_mean       | 0.0323       |
+|    ep_env_seed_mean            | 118          |
+|    ep_episode_energy_mean      | 8.26         |
+|    ep_episode_length_mean      | 156          |
+|    ep_episode_native_cost_mean | 1.59         |
+|    ep_episode_reward_mean      | 162          |
+|    ep_len_mean                 | 310          |
+|    ep_max_step_mean            | 0            |
+|    ep_native_cost_mean         | 0.0355       |
+|    ep_navigation_forward_mean  | 0.171        |
+|    ep_navigation_left_mean     | 0            |
+|    ep_navigation_right_mean    | 0.829        |
+|    ep_out_of_road_mean         | 0.00323      |
+|    ep_overtake_vehicle_num_... | 0            |
+|    ep_raw_action_mean          | 0.16         |
+|    ep_rew_mean                 | 288          |
+|    ep_route_completion_mean    | 0.362        |
+|    ep_steering_mean            | -0.0422      |
+|    ep_step_energy_mean         | 0.0549       |
+|    ep_step_reward_mean         | 1.14         |
+|    ep_takeover_cost_mean       | 0.41         |
+|    ep_takeover_log_prob_mean   | -3.59        |
+|    ep_takeover_mean            | 0.41         |
+|    ep_takeover_start_mean      | 0.0581       |
+|    ep_total_cost_mean          | 1.59         |
+|    ep_total_takeover_cost_mean | 80.1         |
+|    ep_total_takeover_count_... | 80.1         |
+|    ep_velocity_mean            | 11           |
+|    episode_energy_mean         | 17           |
+|    episode_length_mean         | 310          |
+|    episode_native_cost_mean    | 11           |
+|    episode_reward_mean         | 288          |
+|    max_step_mean               | 0            |
+|    native_cost_mean            | 1            |
+|    navigation_forward_mean     | 1            |
+|    navigation_left_mean        | 0            |
+|    navigation_right_mean       | 0            |
+|    out_of_road_mean            | 1            |
+|    overtake_vehicle_num_mean   | 0            |
+|    raw_action_mean             | -0.005237162 |
+|    route_completion_mean       | 0.73         |
+|    steering_mean               | -0.0429      |
+|    step_energy_mean            | 0.0347       |
+|    step_reward_mean            | 0.835        |
+|    t_mean                      | 5.93         |
+|    takeover_cost_mean          | 0            |
+|    takeover_log_prob_mean      | -1.86        |
+|    takeover_mean               | 0            |
+|    takeover_start_mean         | 0            |
+|    total_cost_mean             | 11           |
+|    total_cost_sum              | 11           |
+|    total_takeover_cost_mean    | 128          |
+|    total_takeover_cost_sum     | 128          |
+|    total_takeover_count_mean   | 128          |
+|    total_takeover_count_sum    | 128          |
+|    velocity_mean               | 8.01         |
+| time/                          |              |
+|    episodes                    | 1            |
+|    fps                         | 114          |
+|    time_elapsed                | 2            |
+|    total_timesteps             | 310          |
+| timesteps_total                | 310          |
+| train/                         |              |
+|    learning_rate               | 0.0001       |
+|    n_updates                   | 299          |
+-------------------------------------------------
+Saving model checkpoint to logs/runs/pvp4real_freelevel0.95/pvp4real_freelevel0.95_2025-06-03_20-52-11_7540bf06/models/rl_model_500_steps
+------------------------------------------------
+| rollout/                       |             |
+|    acceleration_mean           | 0.0425      |
+|    action_mean                 | -0.00244613 |
+|    arrive_dest_mean            | 0.5         |
+|    cost_mean                   | 0.5         |
+|    crash_building_mean         | 0           |
+|    crash_human_mean            | 0           |
+|    crash_mean                  | 0           |
+|    crash_object_mean           | 0           |
+|    crash_sidewalk_mean         | 0           |
+|    crash_vehicle_mean          | 0           |
+|    env_seed_mean               | 122         |
+|    ep_acceleration_mean        | 0.397       |
+|    ep_action_mean              | 0.193       |
+|    ep_arrive_dest_mean         | 0.00157     |
+|    ep_cost_mean                | 0.0177      |
+|    ep_crash_building_mean      | 0           |
+|    ep_crash_human_mean         | 0           |
+|    ep_crash_mean               | 0.0161      |
+|    ep_crash_object_mean        | 0           |
+|    ep_crash_sidewalk_mean      | 0           |
+|    ep_crash_vehicle_mean       | 0.0161      |
+|    ep_env_seed_mean            | 122         |
+|    ep_episode_energy_mean      | 7.43        |
+|    ep_episode_length_mean      | 158         |
+|    ep_episode_native_cost_mean | 0.795       |
+|    ep_episode_reward_mean      | 155         |
+|    ep_len_mean                 | 314         |
+|    ep_max_step_mean            | 0           |
+|    ep_native_cost_mean         | 0.0177      |
+|    ep_navigation_forward_mean  | 0.375       |
+|    ep_navigation_left_mean     | 0.0768      |
+|    ep_navigation_right_mean    | 0.548       |
+|    ep_out_of_road_mean         | 0.00161     |
+|    ep_overtake_vehicle_num_... | 0           |
+|    ep_raw_action_mean          | 0.193       |
+|    ep_rew_mean                 | 313         |
+|    ep_route_completion_mean    | 0.406       |
+|    ep_steering_mean            | -0.0108     |
+|    ep_step_energy_mean         | 0.0513      |
+|    ep_step_reward_mean         | 1.09        |
+|    ep_takeover_cost_mean       | 0.474       |
+|    ep_takeover_log_prob_mean   | -4.21       |
+|    ep_takeover_mean            | 0.474       |
+|    ep_takeover_start_mean      | 0.0541      |
+|    ep_total_cost_mean          | 6.3         |
+|    ep_total_takeover_cost_mean | 154         |
+|    ep_total_takeover_count_... | 154         |
+|    ep_velocity_mean            | 10.5        |
+|    episode_energy_mean         | 16.1        |
+|    episode_length_mean         | 314         |
+|    episode_native_cost_mean    | 5.5         |
+|    episode_reward_mean         | 313         |
+|    max_step_mean               | 0           |
+|    native_cost_mean            | 0.5         |
+|    navigation_forward_mean     | 1           |
+|    navigation_left_mean        | 0           |
+|    navigation_right_mean       | 0           |
+|    out_of_road_mean            | 0.5         |
+|    overtake_vehicle_num_mean   | 0           |
+|    raw_action_mean             | -0.00244613 |
+|    route_completion_mean       | 0.858       |
+|    steering_mean               | -0.0474     |
+|    step_energy_mean            | 0.053       |
+|    step_reward_mean            | 1.12        |
+|    t_mean                      | 6.99        |
+|    takeover_cost_mean          | 0           |
+|    takeover_log_prob_mean      | -0.689      |
+|    takeover_mean               | 0           |
+|    takeover_start_mean         | 0           |
+|    total_cost_mean             | 11          |
+|    total_cost_sum              | 11          |
+|    total_takeover_cost_mean    | 214         |
+|    total_takeover_cost_sum     | 300         |
+|    total_takeover_count_mean   | 214         |
+|    total_takeover_count_sum    | 300         |
+|    velocity_mean               | 10.8        |
+| time/                          |             |
+|    episodes                    | 2           |
+|    fps                         | 127         |
+|    time_elapsed                | 4           |
+|    total_timesteps             | 629         |
+| timesteps_total                | 629         |
+| train/                         |             |
+|    learning_rate               | 0.0001      |
+|    n_updates                   | 618         |
+------------------------------------------------
+INFO:pvp.utils.shared_control_monitor:Trajectory data from step 0 to 1000 (totally 1000 steps) is saved at logs/runs/pvp4real_freelevel0.95/pvp4real_freelevel0.95_2025-06-03_20-52-11_7540bf06/data/pvp4real_freelevel0.95_2025-06-03_20-52-11_7540bf06_step_0_1000.pkl
+Saving model checkpoint to logs/runs/pvp4real_freelevel0.95/pvp4real_freelevel0.95_2025-06-03_20-52-11_7540bf06/models/rl_model_1000_steps
+-------------------------------------------------
+| rollout/                       |              |
+|    acceleration_mean           | 0.0406       |
+|    action_mean                 | -0.006140659 |
+|    arrive_dest_mean            | 0.667        |
+|    cost_mean                   | 0.333        |
+|    crash_building_mean         | 0            |
+|    crash_human_mean            | 0            |
+|    crash_mean                  | 0            |
+|    crash_object_mean           | 0            |
+|    crash_sidewalk_mean         | 0            |
+|    crash_vehicle_mean          | 0            |
+|    env_seed_mean               | 118          |
+|    ep_acceleration_mean        | 0.409        |
+|    ep_action_mean              | 0.197        |
+|    ep_arrive_dest_mean         | 0.00188      |
+|    ep_cost_mean                | 0.0118       |
+|    ep_crash_building_mean      | 0            |
+|    ep_crash_human_mean         | 0            |
+|    ep_crash_mean               | 0.0108       |
+|    ep_crash_object_mean        | 0            |
+|    ep_crash_sidewalk_mean      | 0            |
+|    ep_crash_vehicle_mean       | 0.0108       |
+|    ep_env_seed_mean            | 118          |
+|    ep_episode_energy_mean      | 8.21         |
+|    ep_episode_length_mean      | 172          |
+|    ep_episode_native_cost_mean | 0.53         |
+|    ep_episode_reward_mean      | 173          |
+|    ep_len_mean                 | 342          |
+|    ep_max_step_mean            | 0            |
+|    ep_native_cost_mean         | 0.0118       |
+|    ep_navigation_forward_mean  | 0.372        |
+|    ep_navigation_left_mean     | 0.101        |
+|    ep_navigation_right_mean    | 0.528        |
+|    ep_out_of_road_mean         | 0.00108      |
+|    ep_overtake_vehicle_num_... | 0            |
+|    ep_raw_action_mean          | 0.197        |
+|    ep_rew_mean                 | 367          |
+|    ep_route_completion_mean    | 0.421        |
+|    ep_steering_mean            | -0.0145      |
+|    ep_step_energy_mean         | 0.053        |
+|    ep_step_reward_mean         | 1.12         |
+|    ep_takeover_cost_mean       | 0.5          |
+|    ep_takeover_log_prob_mean   | -4.25        |
+|    ep_takeover_mean            | 0.5          |
+|    ep_takeover_start_mean      | 0.0587       |
+|    ep_total_cost_mean          | 7.86         |
+|    ep_total_takeover_cost_mean | 242          |
+|    ep_total_takeover_count_... | 242          |
+|    ep_velocity_mean            | 10.8         |
+|    episode_energy_mean         | 18.2         |
+|    episode_length_mean         | 342          |
+|    episode_native_cost_mean    | 3.67         |
+|    episode_reward_mean         | 367          |
+|    max_step_mean               | 0            |
+|    native_cost_mean            | 0.333        |
+|    navigation_forward_mean     | 1            |
+|    navigation_left_mean        | 0            |
+|    navigation_right_mean       | 0            |
+|    out_of_road_mean            | 0.333        |
+|    overtake_vehicle_num_mean   | 0            |
+|    raw_action_mean             | -0.006140659 |
+|    route_completion_mean       | 0.902        |
+|    steering_mean               | -0.0529      |
+|    step_energy_mean            | 0.0516       |
+|    step_reward_mean            | 1.1          |
+|    t_mean                      | 8.48         |
+|    takeover_cost_mean          | 0            |
+|    takeover_log_prob_mean      | -0.312       |
+|    takeover_mean               | 0            |
+|    takeover_start_mean         | 0            |
+|    total_cost_mean             | 11           |
+|    total_cost_sum              | 11           |
+|    total_takeover_cost_mean    | 316          |
+|    total_takeover_cost_sum     | 519          |
+|    total_takeover_count_mean   | 316          |
+|    total_takeover_count_sum    | 519          |
+|    velocity_mean               | 10.6         |
+| time/                          |              |
+|    episodes                    | 3            |
+|    fps                         | 128          |
+|    time_elapsed                | 7            |
+|    total_timesteps             | 1027         |
+| timesteps_total                | 1027         |
+| train/                         |              |
+|    learning_rate               | 0.0001       |
+|    n_updates                   | 1016         |
+-------------------------------------------------
+--------------------------------------------------
+| rollout/                       |               |
+|    acceleration_mean           | -0.0665       |
+|    action_mean                 | -0.0068451054 |
+|    arrive_dest_mean            | 0.75          |
+|    cost_mean                   | 0.25          |
+|    crash_building_mean         | 0             |
+|    crash_human_mean            | 0             |
+|    crash_mean                  | 0             |
+|    crash_object_mean           | 0             |
+|    crash_sidewalk_mean         | 0             |
+|    crash_vehicle_mean          | 0             |
+|    env_seed_mean               | 118           |
+|    ep_acceleration_mean        | 0.399         |
+|    ep_action_mean              | 0.19          |
+|    ep_arrive_dest_mean         | 0.00203       |
+|    ep_cost_mean                | 0.0169        |
+|    ep_crash_building_mean      | 0             |
+|    ep_crash_human_mean         | 0             |
+|    ep_crash_mean               | 0.016         |
+|    ep_crash_object_mean        | 0             |
+|    ep_crash_sidewalk_mean      | 0             |
+|    ep_crash_vehicle_mean       | 0.016         |
+|    ep_env_seed_mean            | 118           |
+|    ep_episode_energy_mean      | 8.92          |
+|    ep_episode_length_mean      | 180           |
+|    ep_episode_native_cost_mean | 1.48          |
+|    ep_episode_reward_mean      | 180           |
+|    ep_len_mean                 | 358           |
+|    ep_max_step_mean            | 0             |
+|    ep_native_cost_mean         | 0.0169        |
+|    ep_navigation_forward_mean  | 0.368         |
+|    ep_navigation_left_mean     | 0.0755        |
+|    ep_navigation_right_mean    | 0.556         |
+|    ep_out_of_road_mean         | 0.000806      |
+|    ep_overtake_vehicle_num_... | 0             |
+|    ep_raw_action_mean          | 0.19          |
+|    ep_rew_mean                 | 378           |
+|    ep_route_completion_mean    | 0.436         |
+|    ep_steering_mean            | -0.018        |
+|    ep_step_energy_mean         | 0.0541        |
+|    ep_step_reward_mean         | 1.13          |
+|    ep_takeover_cost_mean       | 0.479         |
+|    ep_takeover_log_prob_mean   | -4.02         |
+|    ep_takeover_mean            | 0.479         |
+|    ep_takeover_start_mean      | 0.0581        |
+|    ep_total_cost_mean          | 9.73          |
+|    ep_total_takeover_cost_mean | 334           |
+|    ep_total_takeover_count_... | 334           |
+|    ep_velocity_mean            | 10.9          |
+|    episode_energy_mean         | 19.5          |
+|    episode_length_mean         | 358           |
+|    episode_native_cost_mean    | 6             |
+|    episode_reward_mean         | 378           |
+|    max_step_mean               | 0             |
+|    native_cost_mean            | 0.25          |
+|    navigation_forward_mean     | 1             |
+|    navigation_left_mean        | 0             |
+|    navigation_right_mean       | 0             |
+|    out_of_road_mean            | 0.25          |
+|    overtake_vehicle_num_mean   | 0             |
+|    raw_action_mean             | -0.0068451054 |
+|    route_completion_mean       | 0.924         |
+|    steering_mean               | 0.0528        |
+|    step_energy_mean            | 0.0538        |
+|    step_reward_mean            | 1.14          |
+|    t_mean                      | 10.1          |
+|    takeover_cost_mean          | 0.25          |
+|    takeover_log_prob_mean      | -3.18         |
+|    takeover_mean               | 0.25          |
+|    takeover_start_mean         | 0             |
+|    total_cost_mean             | 14.2          |
+|    total_cost_sum              | 24            |
+|    total_takeover_cost_mean    | 409           |
+|    total_takeover_cost_sum     | 689           |
+|    total_takeover_count_mean   | 409           |
+|    total_takeover_count_sum    | 689           |
+|    velocity_mean               | 10.9          |
+| time/                          |               |
+|    episodes                    | 4             |
+|    fps                         | 123           |
+|    time_elapsed                | 11            |
+|    total_timesteps             | 1434          |
+| timesteps_total                | 1434          |
+| train/                         |               |
+|    learning_rate               | 0.0001        |
+|    n_updates                   | 1423          |
+--------------------------------------------------
+Saving model checkpoint to logs/runs/pvp4real_freelevel0.95/pvp4real_freelevel0.95_2025-06-03_20-52-11_7540bf06/models/rl_model_1500_steps
+Traceback (most recent call last):
+  File "/home/rathul/pvp4real/pvp/experiments/metadrive/train_pvp_metadrive_fakehuman.py", line 173, in <module>
+    model.learn(
+  File "/home/rathul/pvp4real/pvp/pvp_td3.py", line 288, in learn
+    rollout = self.collect_rollouts(
+  File "/home/rathul/pvp4real/pvp/sb3/common/off_policy_algorithm.py", line 612, in collect_rollouts
+    new_obs, rewards, dones, infos = env.step(actions)
+  File "/home/rathul/pvp4real/pvp/sb3/common/vec_env/base_vec_env.py", line 162, in step
+    return self.step_wait()
+  File "/home/rathul/pvp4real/pvp/sb3/common/vec_env/dummy_vec_env.py", line 44, in step_wait
+    obs, self.buf_rews[env_idx], self.buf_dones[env_idx], self.buf_infos[env_idx] = self.envs[env_idx].step(
+  File "/home/rathul/pvp4real/pvp/utils/shared_control_monitor.py", line 41, in step
+    observation, reward, done, info = self.env.step(action)
+  File "/home/rathul/pvp4real/pvp/sb3/common/monitor.py", line 112, in step
+    observation, reward, done, info = self.env.step(action)
+  File "/home/rathul/pvp4real/pvp/experiments/metadrive/egpo/fakehuman_env.py", line 156, in step
+    log_prob = distribution.log_prob(torch.from_numpy(actions).to(last_obs.device))
+KeyboardInterrupt

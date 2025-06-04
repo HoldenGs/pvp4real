@@ -92,14 +92,20 @@ class WandbCallback(BaseCallback):
         log: str = "all",
     ) -> None:
 
-        # PZH: Setup our key
+        # Use W&B API key from environment if available, otherwise try to get it from file
         WANDB_ENV_VAR = "WANDB_API_KEY"
-        key_file_path = get_api_key_file(None)  # Search ~/wandb_api_key_file.txt first, then use PZH's
-        with open(key_file_path, "r") as f:
-            key = f.readline()
-        key = key.replace("\n", "")
-        key = key.replace(" ", "")
-        os.environ[WANDB_ENV_VAR] = key
+        if WANDB_ENV_VAR not in os.environ:
+            try:
+                key_file_path = get_api_key_file(None)  # Search ~/wandb_api_key_file.txt first, then use PZH's
+                with open(key_file_path, "r") as f:
+                    key = f.readline()
+                key = key.replace("\n", "")
+                key = key.replace(" ", "")
+                os.environ[WANDB_ENV_VAR] = key
+            except (FileNotFoundError, Exception) as e:
+                print(f"Warning: Could not read W&B API key from file: {e}")
+                print("Make sure you've run 'wandb login' to authenticate")
+                # Let wandb handle the missing key with its own error message
 
         # PZH: A weird bug here and don't know why this fixes
         if "PYTHONUTF8" in os.environ and os.environ["PYTHONUTF8"] == 'on':

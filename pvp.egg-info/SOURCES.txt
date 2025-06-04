@@ -9,6 +9,7 @@ pvp.egg-info/dependency_links.txt
 pvp.egg-info/top_level.txt
 pvp/experiments/__init__.py
 pvp/sb3/__init__.py
+pvp/sb3/py.typed
 pvp/sb3/setup.py
 pvp/sb3/a2c/__init__.py
 pvp/sb3/a2c/a2c.py
