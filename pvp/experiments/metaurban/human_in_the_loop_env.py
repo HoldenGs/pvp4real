@@ -14,22 +14,54 @@ from metaurban.engine.core.onscreen_message import ScreenMessage
 from metaurban.envs import SidewalkStaticMetaUrbanEnv
 from metaurban.policy.manual_control_policy import TakeoverPolicyWithoutBrake
 from metaurban.utils.math import safe_clip
+from metaurban.component.navigation_module.orca_navigation import ORCATrajectoryNavigation
 
-ScreenMessage.SCALE = 0.1  # same as MetaDrive on-screen HUD scale
+ScreenMessage.SCALE = 0.06  # Further reduced to prevent bottom clipping
 
 HUMAN_IN_THE_LOOP_ENV_CONFIG = {
     # Environment setting:
     "out_of_route_done": True,  # Raise done if out of route.
     "num_scenarios": 50,  # There are totally 50 possible maps.
     "start_seed": 100,  # We will use the map 100~150 as the default training environment.
-    # MetaDrive used “traffic_density" but MetaUrban static env does NOT use traffic_density.:
-    "object_density": 0.2,
+    # MetaDrive used "traffic_density" but MetaUrban static env does NOT use traffic_density.:
+    "object_density": 0.7,  # Increased from 0.2 to match MetaUrban example environment
     "crswalk_density": 1,  # Should only be for dynamic environment
+    
+    # Map and spawn configuration - IMPORTANT for proper object placement
+    "map": "X",  # Use intersection maps like MetaUrban example (more challenging with objects)
+    "random_spawn_lane_index": False,  # Consistent spawn positioning like MetaUrban example
+    "walk_on_all_regions": False,  # Match MetaUrban example spawn behavior
+    "accident_prob": 0,  # No accidents for cleaner training
+    
+    # Agent configuration - IMPORTANT: Must match expert training
+    "agent_type": "wheelchair",  # Expert was trained for wheelchair control, not regular vehicle
+    "drivable_area_extension": 55,  # From expert training config
+    "height_scale": 1,  # From expert training config
+    "spawn_deliveryrobot_num": 2,  # From expert training config
+    "show_mid_block_map": False,  # From expert training config
+    "show_ego_navigation": False,  # From expert training config
+    "on_continuous_line_done": False,  # From expert training config
+    "relax_out_of_road_done": True,  # From expert training config
+    "max_lateral_dist": 15.0,  # From expert training config
+    
+    # Navigation setup for wheelchair agent - CRITICAL for proper destination setting
+    "ego_navigation_module": ORCATrajectoryNavigation,  # Wheelchair uses EgoWheelchair which needs ego_navigation_module
+    
+    # Destination distance control - adjust to spawn closer to objects for more interactions
+    "destination_range": (15, 50),  # Min and max destination distance in meters (default would be ~5-200m)
+    
+    # Spawn numbers from expert training (scaled for training efficiency)
+    "spawn_human_num": 20,  # From expert training
+    "spawn_wheelchairman_num": 1,  # From expert training  
+    "spawn_edog_num": 2,  # From expert training
+    "spawn_erobot_num": 1,  # From expert training
+    "spawn_drobot_num": 1,  # From expert training
+    "max_actor_num": 20,  # From expert training
 
     # Reward and cost setting:    "cost_to_reward": True,  # Cost will be negated and added to the reward. Useless in PVP.
-    # MetaUrban’s cost terms have identical names to MetaDrive’s Safe env (in MetaUrban’s code base,
-    # they ship crash_vehicle_cost, out_of_route_cost, etc.). We’ll leave these as a basis to toggle later.
-    "cost_to_reward": True,         # ADJUST: if MetaUrban’s static env uses same key
+    # MetaUrban's cost terms have identical names to MetaDrive's Safe env (in MetaUrban's code base,
+    # they ship crash_vehicle_cost, out_of_route_cost, etc.). We'll leave these as a basis to toggle later.
+    "cost_to_reward": True,         # ADJUST: if MetaUrban's static env uses same key
     "cos_similarity": False,        # If True, use cos–similarity takeover cost (same logic)
 
     # Set up the control device. Default to use keyboard with the pop-up interface.
@@ -38,15 +70,15 @@ HUMAN_IN_THE_LOOP_ENV_CONFIG = {
     "controller": "keyboard",          # [keyboard, xbox, steering_wheel]
     "only_takeover_start_cost": False,
 
-    # Visualize
-    """
-    TODO: I get the following error from the below
-    [WARNING] show_dest_mark and show_line_to_dest are not supported in ORCATrajectoryNavigation (orca_navigation.py:73)
-    """
+    # Scene visualization and navigation
+    "show_sidewalk": True,  # Make sidewalks visible
+    "show_crosswalk": True,  # Make crosswalks visible 
     "vehicle_config": {
-        "show_dest_mark": True,
-        "show_line_to_dest": True,
-        "show_line_to_navi_mark": True,
+        "show_navi_mark": True,  # Show navigation markers like MetaUrban example
+        "show_line_to_navi_mark": False,  # Match MetaUrban example
+        "show_dest_mark": False,  # Match MetaUrban example
+        "enable_reverse": True,  # Allow reverse like MetaUrban example
+        "policy_reverse": False,  # Match MetaUrban example
     },
     "horizon": 1500,
     
@@ -56,7 +88,7 @@ HUMAN_IN_THE_LOOP_ENV_CONFIG = {
     "crash_object_done": False,
     "crash_building_done": False,
     "crash_human_done": False,
-    # “out_of_route_done” already set above. If you want out_of_route to end episode, keep it True.
+    # "out_of_route_done" already set above. If you want out_of_route to end episode, keep it True.
 }
 
 class HumanInTheLoopEnv(SidewalkStaticMetaUrbanEnv):
@@ -90,7 +122,7 @@ class HumanInTheLoopEnv(SidewalkStaticMetaUrbanEnv):
         self.agent_action = None
         # Reset manual accumualted cost
         self.episode_native_cost = 0
-        # MetaUrban’s reset returns (obs, info) by default (Gymv26 style). We discard “info” here for legacy code.
+        # MetaUrban's reset returns (obs, info) by default (Gymv26 style). We discard "info" here for legacy code.
         obs, info = super(HumanInTheLoopEnv, self).reset(*args, **kwargs)
         return obs
 
@@ -139,7 +171,7 @@ class HumanInTheLoopEnv(SidewalkStaticMetaUrbanEnv):
         """
         In MetaDrive you overrode out_of_road to include sidewalk & on_lane tests.
         In MetaUrban, we simply trust MetaUrban's built-in _is_out_of_road. But if you need
-        “crash_sidewalk” logic, you can reimplement here.
+        "crash_sidewalk" logic, you can reimplement here.
         """
         ret = (not vehicle.on_lane) or vehicle.crash_sidewalk
         if self.config["out_of_route_done"]:
@@ -150,31 +182,35 @@ class HumanInTheLoopEnv(SidewalkStaticMetaUrbanEnv):
         """
         Wrap the base step() so that:
          - we can record the raw agent_action (for takeover logic)
-         - we can pause if user hits “e”
+         - we can pause if user hits "e"
          - we stamp total_takeover_count and total_steps
          - we pop the HUD if use_render=True
         """
         self.agent_action = copy.copy(actions)
         ret = super().step(actions)
 
-        # Pause logic: if paused by “e”, run the engine until unpaused
+        # Pause logic: if paused by "e", run the engine until unpaused
         while self.in_pause:
             self.engine.taskMgr.step()
 
         self.takeover_recorder.append(self.takeover)
 
         if self.config["use_render"]:
-            super().render(
-                text={
-                    "Total Cost": round(self.total_cost, 2),
-                    "Takeover Cost": round(self.total_takeover_cost, 2),
-                    "Takeover": "TAKEOVER" if self.takeover else "NO",
-                    "Total Step": self.total_steps,
-                    "Total Time": time.strftime("%M:%S", time.gmtime(time.time() - self.start_time)),
-                    "Takeover Rate": "{:.2f}%".format(np.mean(np.array(self.takeover_recorder) * 100)),
-                    "Pause": "Press E",
-                }
-            )
+            # Calculate takeover rate
+            takeover_rate = np.mean(np.array(self.takeover_recorder) * 100) if len(self.takeover_recorder) > 0 else 0.0
+            
+            # Ultra-compact text display to prevent bottom clipping
+            text_dict = {
+                # Essential info only
+                "Status": "TAKEOVER" if self.takeover else "NORMAL",
+                "Action": f"[{self.agent_action[0]:.2f}, {self.agent_action[1]:.2f}]" if self.agent_action is not None else "[0.00, 0.00]",
+                "Step": f"{self.total_steps}",
+                "Takeover%": f"{takeover_rate:.1f}%",
+                "Cost": f"{round(self.total_cost, 1)}",
+                "Controls": "E=Pause",
+            }
+            
+            super().render(text=text_dict)
 
         self.total_steps += 1
         self.total_takeover_count += int(self.takeover)
@@ -182,11 +218,11 @@ class HumanInTheLoopEnv(SidewalkStaticMetaUrbanEnv):
         return ret
 
     def stop(self):
-        """Called when the user hits “e”; toggles pause."""
+        """Called when the user hits "e"; toggles pause."""
         self.in_pause = not self.in_pause
 
     def setup_engine(self):
-        """Hook the “e” key to toggle pause on/off (exactly as MetaDrive)."""
+        """Hook the "e" key to toggle pause on/off (exactly as MetaDrive)."""
         super().setup_engine()
         self.engine.accept("e", self.stop)
 
