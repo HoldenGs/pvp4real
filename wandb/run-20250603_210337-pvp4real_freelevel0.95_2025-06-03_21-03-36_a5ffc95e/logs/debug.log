@@ -1,0 +1,37 @@
+2025-06-03 21:03:37,576 INFO    MainThread:1614485 [wandb_setup.py:_flush():81] Current SDK version is 0.20.0
+2025-06-03 21:03:37,576 INFO    MainThread:1614485 [wandb_setup.py:_flush():81] Configure stats pid to 1614485
+2025-06-03 21:03:37,576 INFO    MainThread:1614485 [wandb_setup.py:_flush():81] Loading settings from /home/rathul/.config/wandb/settings
+2025-06-03 21:03:37,576 INFO    MainThread:1614485 [wandb_setup.py:_flush():81] Loading settings from /home/rathul/pvp4real/wandb/settings
+2025-06-03 21:03:37,579 INFO    MainThread:1614485 [wandb_setup.py:_flush():81] Loading settings from environment variables
+2025-06-03 21:03:37,579 INFO    MainThread:1614485 [wandb_init.py:setup_run_log_directory():703] Logging user logs to /home/rathul/pvp4real/wandb/run-20250603_210337-pvp4real_freelevel0.95_2025-06-03_21-03-36_a5ffc95e/logs/debug.log
+2025-06-03 21:03:37,582 INFO    MainThread:1614485 [wandb_init.py:setup_run_log_directory():704] Logging internal logs to /home/rathul/pvp4real/wandb/run-20250603_210337-pvp4real_freelevel0.95_2025-06-03_21-03-36_a5ffc95e/logs/debug-internal.log
+2025-06-03 21:03:37,589 INFO    MainThread:1614485 [wandb_init.py:init():831] calling init triggers
+2025-06-03 21:03:37,589 INFO    MainThread:1614485 [wandb_init.py:init():836] wandb.init called with sweep_config: {}
+config: {'env_config': {'use_render': False, 'free_level': 0.95}, 'algo': {'adaptive_batch_size': 'False', 'bc_loss_weight': 1.0, 'only_bc_loss': 'False', 'with_human_proxy_value_loss': 'True', 'with_agent_proxy_value_loss': 'True', 'add_bc_loss': 'True', 'use_balance_sample': True, 'agent_data_ratio': 1.0, 'policy': <class 'pvp.sb3.td3.policies.TD3Policy'>, 'replay_buffer_class': <class 'pvp.sb3.haco.haco_buffer.HACOReplayBuffer'>, 'replay_buffer_kwargs': {'discard_reward': True}, 'policy_kwargs': {'net_arch': [256, 256]}, 'env': <SharedControlMonitor<Monitor<FakeHumanEnv instance>>>, 'learning_rate': 0.0001, 'q_value_bound': 1, 'optimize_memory_usage': True, 'buffer_size': 50000, 'learning_starts': 10, 'batch_size': 1024, 'tau': 0.005, 'gamma': 0.99, 'train_freq': (1, 'step'), 'action_noise': None, 'tensorboard_log': PosixPath('logs/runs/pvp4real_freelevel0.95/pvp4real_freelevel0.95_2025-06-03_21-03-36_a5ffc95e'), 'create_eval_env': False, 'verbose': 2, 'seed': 0, 'device': 'auto'}, 'exp_name': 'pvp4real_freelevel0.95', 'seed': 0, 'use_wandb': True, 'trial_name': 'pvp4real_freelevel0.95_2025-06-03_21-03-36_a5ffc95e', 'log_dir': 'logs/runs/pvp4real_freelevel0.95/pvp4real_freelevel0.95_2025-06-03_21-03-36_a5ffc95e', '_wandb': {'code_path': 'code/pvp/experiments/metadrive/train_pvp_metadrive_fakehuman.py'}}
+2025-06-03 21:03:37,591 INFO    MainThread:1614485 [wandb_init.py:init():872] starting backend
+2025-06-03 21:03:37,894 INFO    MainThread:1614485 [wandb_init.py:init():875] sending inform_init request
+2025-06-03 21:03:37,966 INFO    MainThread:1614485 [wandb_init.py:init():883] backend started and connected
+2025-06-03 21:03:37,974 INFO    MainThread:1614485 [wandb_init.py:init():956] updated telemetry
+2025-06-03 21:03:38,057 INFO    MainThread:1614485 [wandb_init.py:init():980] communicating run to backend with 90.0 second timeout
+2025-06-03 21:03:38,329 WARNING MainThread:1614485 [wandb_init.py:init():1613] [no run ID] interrupted
+Traceback (most recent call last):
+  File "/home/rathul/miniconda3/envs/pvp4real/lib/python3.9/site-packages/wandb/sdk/wandb_init.py", line 1609, in init
+    return wi.init(run_settings, run_config, run_printer)
+  File "/home/rathul/miniconda3/envs/pvp4real/lib/python3.9/site-packages/wandb/sdk/wandb_init.py", line 999, in init
+    result = wait_with_progress(
+  File "/home/rathul/miniconda3/envs/pvp4real/lib/python3.9/site-packages/wandb/sdk/mailbox/wait_with_progress.py", line 24, in wait_with_progress
+    return wait_all_with_progress(
+  File "/home/rathul/miniconda3/envs/pvp4real/lib/python3.9/site-packages/wandb/sdk/mailbox/wait_with_progress.py", line 70, in wait_all_with_progress
+    return _wait_handles(handle_list, timeout=progress_after)
+  File "/home/rathul/miniconda3/envs/pvp4real/lib/python3.9/site-packages/wandb/sdk/mailbox/wait_with_progress.py", line 110, in _wait_handles
+    results.append(handle.wait_or(timeout=remaining_timeout))
+  File "/home/rathul/miniconda3/envs/pvp4real/lib/python3.9/site-packages/wandb/sdk/mailbox/mailbox_handle.py", line 118, in wait_or
+    return self._fn(self._handle.wait_or(timeout=timeout))
+  File "/home/rathul/miniconda3/envs/pvp4real/lib/python3.9/site-packages/wandb/sdk/mailbox/response_handle.py", line 84, in wait_or
+    if not self._event.wait(timeout=timeout):
+  File "/home/rathul/miniconda3/envs/pvp4real/lib/python3.9/threading.py", line 581, in wait
+    signaled = self._cond.wait(timeout)
+  File "/home/rathul/miniconda3/envs/pvp4real/lib/python3.9/threading.py", line 316, in wait
+    gotit = waiter.acquire(True, timeout)
+KeyboardInterrupt
+2025-06-03 21:03:38,372 INFO    MsgRouterThr:1614485 [mailbox.py:close():129] [no run ID] Closing mailbox, abandoning 0 handles.

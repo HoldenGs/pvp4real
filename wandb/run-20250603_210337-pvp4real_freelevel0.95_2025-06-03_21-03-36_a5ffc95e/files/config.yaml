@@ -1,0 +1,70 @@
+_wandb:
+    value:
+        cli_version: 0.20.0
+        code_path: code/pvp/experiments/metadrive/train_pvp_metadrive_fakehuman.py
+        m: []
+        python_version: 3.9.21
+        t:
+            "1":
+                - 1
+            "3":
+                - 14
+                - 16
+                - 35
+                - 55
+            "4": 3.9.21
+            "5": 0.20.0
+            "10":
+                - 20
+            "12": 0.20.0
+            "13": linux-x86_64
+algo:
+    value:
+        action_noise: null
+        adaptive_batch_size: "False"
+        add_bc_loss: "True"
+        agent_data_ratio: 1
+        batch_size: 1024
+        bc_loss_weight: 1
+        buffer_size: 50000
+        create_eval_env: false
+        device: auto
+        env: <SharedControlMonitor<Monitor<FakeHumanEnv instance>>>
+        gamma: 0.99
+        learning_rate: 0.0001
+        learning_starts: 10
+        only_bc_loss: "False"
+        optimize_memory_usage: true
+        policy: pvp.sb3.td3.policies.TD3Policy
+        policy_kwargs:
+            net_arch:
+                - 256
+                - 256
+        q_value_bound: 1
+        replay_buffer_class: pvp.sb3.haco.haco_buffer.HACOReplayBuffer
+        replay_buffer_kwargs:
+            discard_reward: true
+        seed: 0
+        tau: 0.005
+        tensorboard_log: logs/runs/pvp4real_freelevel0.95/pvp4real_freelevel0.95_2025-06-03_21-03-36_a5ffc95e
+        train_freq:
+            - 1
+            - step
+        use_balance_sample: true
+        verbose: 2
+        with_agent_proxy_value_loss: "True"
+        with_human_proxy_value_loss: "True"
+env_config:
+    value:
+        free_level: 0.95
+        use_render: false
+exp_name:
+    value: pvp4real_freelevel0.95
+log_dir:
+    value: logs/runs/pvp4real_freelevel0.95/pvp4real_freelevel0.95_2025-06-03_21-03-36_a5ffc95e
+seed:
+    value: 0
+trial_name:
+    value: pvp4real_freelevel0.95_2025-06-03_21-03-36_a5ffc95e
+use_wandb:
+    value: true

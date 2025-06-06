@@ -1,3 +1,5 @@
+# pvp/experiments/metadrive/human_in_the_loop_env.py
+
 import copy
 import time
 from collections import deque
@@ -65,6 +67,7 @@ class HumanInTheLoopEnv(SafeMetaDriveEnv):
 
     def _get_step_return(self, actions, engine_info):
         """Compute takeover cost here."""
+        # (next obs, rewards, termination flag, cost flag, engine_info dict)
         o, r, tm, tc, engine_info = super(HumanInTheLoopEnv, self)._get_step_return(actions, engine_info)
         d = tm or tc
 
@@ -149,9 +152,13 @@ class HumanInTheLoopEnv(SafeMetaDriveEnv):
 
 if __name__ == "__main__":
     env = HumanInTheLoopEnv({
-        "manual_control": True,
-        "use_render": True,
+        "manual_control": False,
+        "use_render": False,
     })
+    # env = HumanInTheLoopEnv({
+    #     "manual_control": True,
+    #     "use_render": True,
+    # })
     env.reset()
     while True:
         _, _, done, _ = env.step([0, 0])

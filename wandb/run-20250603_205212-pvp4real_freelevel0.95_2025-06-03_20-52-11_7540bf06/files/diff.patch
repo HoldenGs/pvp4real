@@ -1,0 +1,174 @@
+diff --git a/README.md b/README.md
+index 78c8380..0661523 100755
+--- a/README.md
++++ b/README.md
+@@ -21,6 +21,8 @@ Compared to [PVP repo](https://metadriverse.github.io/pvp/), we include the simu
+ 
+ ## Installation
+ 
++TODO: `pvp4real` uses Python 3.7, but MetaUrban uses Python 3.9. Do I need to use 3.9 for MetaUrban integration?
++
+ ```bash
+ # Clone the code to local machine
+ git clone https://github.com/pengzhenghao/pvp4real
+@@ -42,6 +44,21 @@ pip install torch
+ # Using latest MetaDrive should work:
+ pip install git+https://github.com/metadriverse/metadrive.git
+ 
++# Install MetaUrbanw with ORCA (necessary for MetaUrban's expert policy)
++
++
++```
++
++Also, install MetaUrban in a separate directory *outside of this project*. You must install from source to use MetaUrban's expert policy (as it requires ORCA for trajectory generation).
++
++```bash
++git clone -b main --depth 1 https://github.com/metadriverse/metaurban.git
++cd metaurban
++pip install -e .
++conda install pybind11 -c conda-forge
++cd metaurban/orca_algo && rm -rf build
++bash compile.sh && cd ../..
++pip install stable_baselines3 imitation tensorboard wandb scikit-image pyyaml gdown
+ ```
+ 
+ 
+@@ -85,7 +102,7 @@ model.learn(
+ )
+ ```
+ 
+-You can use wandb to monitor the training process:
++You can use `wandb` to monitor the training process:
+ 
+ ```bash
+ nohup python pvp/experiments/metadrive/train_pvp_metadrive_fakehuman.py \
+diff --git a/pvp.egg-info/PKG-INFO b/pvp.egg-info/PKG-INFO
+index b1d6262..de3f5eb 100644
+--- a/pvp.egg-info/PKG-INFO
++++ b/pvp.egg-info/PKG-INFO
+@@ -1,3 +1,3 @@
+-Metadata-Version: 2.1
++Metadata-Version: 2.4
+ Name: pvp
+ Version: 0.0.1
+diff --git a/pvp.egg-info/SOURCES.txt b/pvp.egg-info/SOURCES.txt
+index 54bb25c..35fb1a3 100644
+--- a/pvp.egg-info/SOURCES.txt
++++ b/pvp.egg-info/SOURCES.txt
+@@ -9,6 +9,7 @@ pvp.egg-info/dependency_links.txt
+ pvp.egg-info/top_level.txt
+ pvp/experiments/__init__.py
+ pvp/sb3/__init__.py
++pvp/sb3/py.typed
+ pvp/sb3/setup.py
+ pvp/sb3/a2c/__init__.py
+ pvp/sb3/a2c/a2c.py
+diff --git a/pvp/experiments/metadrive/egpo/fakehuman_env.py b/pvp/experiments/metadrive/egpo/fakehuman_env.py
+index bb8153b..24e28da 100644
+--- a/pvp/experiments/metadrive/egpo/fakehuman_env.py
++++ b/pvp/experiments/metadrive/egpo/fakehuman_env.py
+@@ -1,3 +1,5 @@
++# pvp/experiments/metadrive/egpo/fakehuman_env.py
++
+ import copy
+ import math
+ import pathlib
+diff --git a/pvp/experiments/metadrive/human_in_the_loop_env.py b/pvp/experiments/metadrive/human_in_the_loop_env.py
+index 21af9a6..48cb008 100644
+--- a/pvp/experiments/metadrive/human_in_the_loop_env.py
++++ b/pvp/experiments/metadrive/human_in_the_loop_env.py
+@@ -1,3 +1,5 @@
++# pvp/experiments/metadrive/human_in_the_loop_env.py
++
+ import copy
+ import time
+ from collections import deque
+diff --git a/pvp/experiments/metadrive/train_pvp_metadrive_fakehuman.py b/pvp/experiments/metadrive/train_pvp_metadrive_fakehuman.py
+index e76e9ca..bffac24 100644
+--- a/pvp/experiments/metadrive/train_pvp_metadrive_fakehuman.py
++++ b/pvp/experiments/metadrive/train_pvp_metadrive_fakehuman.py
+@@ -65,7 +65,7 @@ if __name__ == '__main__':
+         env_config=dict(
+ 
+             # Original real human exp env config:
+-            use_render=True,  # Open the interface
++            use_render=False,  # Open the interface
+             # manual_control=True,  # Allow receiving control signal from external device
+             # controller=control_device,
+             # window_size=(1600, 1100),
+diff --git a/pvp/experiments/metaurban/human_in_the_loop_env.py b/pvp/experiments/metaurban/human_in_the_loop_env.py
+index 78b7c75..4abca23 100644
+--- a/pvp/experiments/metaurban/human_in_the_loop_env.py
++++ b/pvp/experiments/metaurban/human_in_the_loop_env.py
+@@ -6,11 +6,14 @@ from collections import deque
+ 
+ import numpy as np
+ 
+-# === Imports changed to MetaUrban equivalents ===
++# https://github.com/metadriverse/metaurban/blob/9f937640ce01a169dc2af46c7e7f8cc6c9bef00e/metaurban/engine/core/onscreen_message.py#L9
++# https://github.com/metadriverse/metaurban/blob/9f937640ce01a169dc2af46c7e7f8cc6c9bef00e/metaurban/envs/sidewalk_static_env.py#L111
++# https://github.com/metadriverse/metaurban/blob/9f937640ce01a169dc2af46c7e7f8cc6c9bef00e/metaurban/policy/manual_control_policy.py#L114
++# Also includes TakeoverPolicyWithoutBrake, TODO: which to select?
+ from metaurban.engine.core.onscreen_message import ScreenMessage
+-from metaurban.envs import SidewalkStaticMetaUrbanEnv  # <— MetaUrban base class
+-from metaurban.policy.manual_control_policy import TakeoverPolicy  # <— MetaUrban’s manual‐control
+-from metaurban.utils.math import safe_clip  # <— check that this helper exists; if not, copy from MetaDrive
++from metaurban.envs import SidewalkStaticMetaUrbanEnv
++from metaurban.policy.manual_control_policy import TakeoverPolicy 
++from metaurban.utils.math import safe_clip
+ 
+ ScreenMessage.SCALE = 0.1  # same as MetaDrive—controls on‐screen HUD scale
+ 
+@@ -205,6 +208,7 @@ class HumanInTheLoopEnv(SidewalkStaticMetaUrbanEnv):
+ 
+ 
+ if __name__ == "__main__":
++    # Same unit test as MetaDrive experiments
+     env = HumanInTheLoopEnv({
+         "manual_control": True,
+         "use_render": True,
+diff --git a/pvp/sb3/common/wandb_callback.py b/pvp/sb3/common/wandb_callback.py
+index bb86e75..3db1804 100644
+--- a/pvp/sb3/common/wandb_callback.py
++++ b/pvp/sb3/common/wandb_callback.py
+@@ -92,14 +92,20 @@ class WandbCallback(BaseCallback):
+         log: str = "all",
+     ) -> None:
+ 
+-        # PZH: Setup our key
++        # Use W&B API key from environment if available, otherwise try to get it from file
+         WANDB_ENV_VAR = "WANDB_API_KEY"
+-        key_file_path = get_api_key_file(None)  # Search ~/wandb_api_key_file.txt first, then use PZH's
+-        with open(key_file_path, "r") as f:
+-            key = f.readline()
+-        key = key.replace("\n", "")
+-        key = key.replace(" ", "")
+-        os.environ[WANDB_ENV_VAR] = key
++        if WANDB_ENV_VAR not in os.environ:
++            try:
++                key_file_path = get_api_key_file(None)  # Search ~/wandb_api_key_file.txt first, then use PZH's
++                with open(key_file_path, "r") as f:
++                    key = f.readline()
++                key = key.replace("\n", "")
++                key = key.replace(" ", "")
++                os.environ[WANDB_ENV_VAR] = key
++            except (FileNotFoundError, Exception) as e:
++                print(f"Warning: Could not read W&B API key from file: {e}")
++                print("Make sure you've run 'wandb login' to authenticate")
++                # Let wandb handle the missing key with its own error message
+ 
+         # PZH: A weird bug here and don't know why this fixes
+         if "PYTHONUTF8" in os.environ and os.environ["PYTHONUTF8"] == 'on':
+diff --git a/requirements.txt b/requirements.txt
+index 9f082f7..53da134 100755
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -17,7 +17,7 @@ tensorboard
+ wandb
+ screeninfo
+ keyboard
+-gym==0.19.0
++gym #==0.19.0
+ # gym[atari]==0.19.0
+ dm-tree
+ tabulate

@@ -1,0 +1,19 @@
+{"time":"2025-06-03T20:52:13.455657724-07:00","level":"INFO","msg":"stream: starting","core version":"0.20.0","symlink path":"/home/rathul/pvp4real/wandb/run-20250603_205212-pvp4real_freelevel0.95_2025-06-03_20-52-11_7540bf06/logs/debug-core.log"}
+{"time":"2025-06-03T20:52:13.811204771-07:00","level":"INFO","msg":"stream: created new stream","id":"pvp4real_freelevel0.95_2025-06-03_20-52-11_7540bf06"}
+{"time":"2025-06-03T20:52:13.81127954-07:00","level":"INFO","msg":"stream: started","id":"pvp4real_freelevel0.95_2025-06-03_20-52-11_7540bf06"}
+{"time":"2025-06-03T20:52:13.81133704-07:00","level":"INFO","msg":"writer: Do: started","stream_id":"pvp4real_freelevel0.95_2025-06-03_20-52-11_7540bf06"}
+{"time":"2025-06-03T20:52:13.811423579-07:00","level":"INFO","msg":"sender: started","stream_id":"pvp4real_freelevel0.95_2025-06-03_20-52-11_7540bf06"}
+{"time":"2025-06-03T20:52:13.811400649-07:00","level":"INFO","msg":"handler: started","stream_id":"pvp4real_freelevel0.95_2025-06-03_20-52-11_7540bf06"}
+{"time":"2025-06-03T20:52:14.041360276-07:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-06-03T20:52:14.094300148-07:00","level":"ERROR","msg":"error getting latest commit","error":"exit status 128"}
+{"time":"2025-06-03T20:52:26.285074883-07:00","level":"WARN","msg":"tensorboard: no root directory","error":"timed out after 10s"}
+{"time":"2025-06-03T20:52:26.285445421-07:00","level":"INFO","msg":"tensorboard: tracking new log directory","rootDir":{},"logDir":"LocalOrCloudPath(LocalPath=\"/home/rathul/pvp4real/logs/runs/pvp4real_freelevel0.95/pvp4real_freelevel0.95_2025-06-03_20-52-11_7540bf06/pvp4real_freelevel0.95_1\")","namespace":""}
+{"time":"2025-06-03T20:52:26.286198045-07:00","level":"INFO","msg":"tensorboard: saving file","fileLocation":"/home/rathul/pvp4real/logs/runs/pvp4real_freelevel0.95/pvp4real_freelevel0.95_2025-06-03_20-52-11_7540bf06/pvp4real_freelevel0.95_1/events.out.tfevents.1749009136.ynez.1609413.0","runPath":"logs/runs/pvp4real_freelevel0.95/pvp4real_freelevel0.95_2025-06-03_20-52-11_7540bf06/pvp4real_freelevel0.95_1/events.out.tfevents.1749009136.ynez.1609413.0"}
+{"time":"2025-06-03T20:52:29.203958226-07:00","level":"INFO","msg":"stream: closing","id":"pvp4real_freelevel0.95_2025-06-03_20-52-11_7540bf06"}
+{"time":"2025-06-03T20:52:29.203988956-07:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-06-03T20:52:29.204014106-07:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-06-03T20:52:29.760298644-07:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-06-03T20:52:29.880277466-07:00","level":"INFO","msg":"handler: closed","stream_id":"pvp4real_freelevel0.95_2025-06-03_20-52-11_7540bf06"}
+{"time":"2025-06-03T20:52:29.880339745-07:00","level":"INFO","msg":"sender: closed","stream_id":"pvp4real_freelevel0.95_2025-06-03_20-52-11_7540bf06"}
+{"time":"2025-06-03T20:52:29.880338815-07:00","level":"INFO","msg":"writer: Close: closed","stream_id":"pvp4real_freelevel0.95_2025-06-03_20-52-11_7540bf06"}
+{"time":"2025-06-03T20:52:29.885443828-07:00","level":"INFO","msg":"stream: closed","id":"pvp4real_freelevel0.95_2025-06-03_20-52-11_7540bf06"}
