@@ -1,0 +1,6 @@
+title: MetaUrban × PVP4Real Integration
+description: Integrating Sidewalk Navigation with Human-in-the-Loop Reinforcement Learning
+theme: minima
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap 

@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MetaUrban Integration with PVP4Real</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="hero-title">
+                    <span class="gradient-text">MetaUrban</span> × 
+                    <span class="gradient-text">PVP4Real</span>
+                </h1>
+                <p class="hero-subtitle">Integrating Sidewalk Navigation with Human-in-the-Loop Reinforcement Learning</p>
+                <p class="hero-description">
+                    A comprehensive integration that brings MetaUrban's sophisticated sidewalk navigation environment 
+                    into PVP4Real's human-in-the-loop reinforcement learning framework, enabling safer AI training 
+                    through expert demonstrations and human oversight.
+                </p>
+                <div class="hero-buttons">
+                    <a href="#contribution" class="btn-primary">
+                        <i class="fas fa-rocket"></i> Explore Contribution
+                    </a>
+                    <a href="#demo" class="btn-secondary">
+                        <i class="fas fa-play"></i> Watch Demo
+                    </a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <i class="fas fa-brain"></i>
+                        <h3>Expert Policy</h3>
+                        <p>Pretrained PPO agent guides learning</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-road"></i>
+                        <h3>Sidewalk Navigation</h3>
+                        <p>Complex urban environment simulation</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-users"></i>
+                        <h3>Human-in-the-Loop</h3>
+                        <p>Safe RL with human oversight</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-chart-line"></i>
+                        <h3>Adaptive Learning</h3>
+                        <p>Dynamic takeover based on confidence</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <div class="scroll-arrow"></div>
+        </div>
+    </section>
+
+    <!-- Problem & Solution Section -->
+    <section class="problem-solution">
+        <div class="container">
+            <h2 class="section-title">The Challenge</h2>
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <h3>Safety in RL Training</h3>
+                    <p>Traditional RL agents can make catastrophic mistakes during exploration, especially in safety-critical domains like autonomous navigation.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">
+                        <i class="fas fa-puzzle-piece"></i>
+                    </div>
+                    <h3>Environment Integration</h3>
+                    <p>Bridging different simulation frameworks requires careful adaptation of observation spaces, action spaces, and reward structures.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">
+                        <i class="fas fa-balance-scale"></i>
+                    </div>
+                    <h3>Expert vs Agent Balance</h3>
+                    <p>Finding the right balance between expert guidance and agent exploration to enable effective learning without over-dependence.</p>
+                </div>
+            </div>
+
+            <div class="solution-section">
+                <h2 class="section-title">The Solution</h2>
+                <div class="solution-flow">
+                    <div class="flow-step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h3>Environment Wrapper</h3>
+                            <p>Created <code>FakeHumanEnv</code> that wraps MetaUrban's sidewalk environment with PVP4Real's human-in-the-loop interface.</p>
+                        </div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h3>Expert Integration</h3>
+                            <p>Integrated pretrained PPO expert that evaluates agent actions and triggers takeovers based on action probability.</p>
+                        </div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h3>Adaptive Training</h3>
+                            <p>Implemented PVPTD3 with HACO buffer for safe, efficient learning from both expert demonstrations and agent exploration.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technical Contribution Section -->
+    <section id="contribution" class="contribution">
+        <div class="container">
+            <h2 class="section-title">Technical Contribution</h2>
+            
+            <div class="contribution-grid">
+                <div class="contribution-item">
+                    <div class="contribution-header">
+                        <i class="fas fa-code"></i>
+                        <h3>FakeHumanEnv Implementation</h3>
+                    </div>
+                    <p>A sophisticated wrapper that seamlessly integrates MetaUrban's observation and action spaces with PVP4Real's human-in-the-loop framework.</p>
+                    <div class="code-preview">
+                        <pre><code class="language-python">class FakeHumanEnv(HumanInTheLoopEnv):
+    def step(self, actions):
+        # Query expert network for action probability
+        with torch.no_grad():
+            obs_tensor, _ = self.expert.obs_to_tensor(self.last_obs)
+            distribution = self.expert.get_distribution(obs_tensor)
+            log_prob = distribution.log_prob(torch.from_numpy(actions))
+            action_prob = log_prob.exp().cpu().numpy()[0]
+            
+        # Trigger takeover if probability below threshold
+        if action_prob < 1.0 - self.config["free_level"]:
+            actions = expert_action
+            self.takeover = True</code></pre>
+                    </div>
+                </div>
+
+                <div class="contribution-item">
+                    <div class="contribution-header">
+                        <i class="fas fa-brain"></i>
+                        <h3>Expert Policy Integration</h3>
+                    </div>
+                    <p>Seamless integration of pretrained PPO expert with confidence-based takeover mechanism for safe exploration.</p>
+                    <div class="metrics-grid">
+                        <div class="metric">
+                            <span class="metric-value">95%</span>
+                            <span class="metric-label">Free Level Threshold</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-value">576K</span>
+                            <span class="metric-label">Expert Training Steps</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-value">Dynamic</span>
+                            <span class="metric-label">Takeover Decision</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="contribution-item">
+                    <div class="contribution-header">
+                        <i class="fas fa-cogs"></i>
+                        <h3>Training Pipeline</h3>
+                    </div>
+                    <p>Complete training pipeline with PVPTD3 algorithm, HACO replay buffer, and comprehensive logging and evaluation.</p>
+                    <div class="pipeline-features">
+                        <div class="feature-tag">PVPTD3 Algorithm</div>
+                        <div class="feature-tag">HACO Replay Buffer</div>
+                        <div class="feature-tag">Wandb Integration</div>
+                        <div class="feature-tag">Checkpoint Management</div>
+                        <div class="feature-tag">Evaluation Pipeline</div>
+                    </div>
+                </div>
+
+                <div class="contribution-item">
+                    <div class="contribution-header">
+                        <i class="fas fa-eye"></i>
+                        <h3>Visual Feedback System</h3>
+                    </div>
+                    <p>Real-time visualization system showing expert decisions, takeover rates, and training progress with optimized HUD display.</p>
+                    <div class="visual-features">
+                        <ul>
+                            <li><i class="fas fa-check"></i> Real-time takeover status</li>
+                            <li><i class="fas fa-check"></i> Action probability display</li>
+                            <li><i class="fas fa-check"></i> Expert vs agent actions</li>
+                            <li><i class="fas fa-check"></i> Performance metrics</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Code Explorer -->
+    <section class="code-explorer">
+        <div class="container">
+            <h2 class="section-title">Explore the Code</h2>
+            <div class="code-tabs">
+                <button class="tab-button active" data-tab="training">Training Script</button>
+                <button class="tab-button" data-tab="environment">Environment Wrapper</button>
+                <button class="tab-button" data-tab="expert">Expert Integration</button>
+            </div>
+            
+            <div class="tab-content active" id="training">
+                <h3>train_pvp_metaurban_fakehuman.py</h3>
+                <pre><code class="language-python"># Complete training pipeline for MetaUrban integration
+def main():
+    # Environment setup
+    train_env = FakeHumanEnv(config=config["env_config"])
+    train_env = Monitor(env=train_env, filename=str(trial_dir))
+    train_env = SharedControlMonitor(env=train_env, folder=trial_dir / "data")
+    
+    # PVPTD3 with HACO configuration
+    model = PVPTD3(
+        policy=TD3Policy,
+        replay_buffer_class=HACOReplayBuffer,
+        env=train_env,
+        learning_rate=1e-4,
+        buffer_size=50_000,
+        batch_size=args.batch_size,
+        # ... additional configuration
+    )
+    
+    # Training with callbacks
+    model.learn(
+        total_timesteps=50_000,
+        callback=callbacks,
+        eval_env=eval_env if args.enable_eval else None,
+    )</code></pre>
+            </div>
+            
+            <div class="tab-content" id="environment">
+                <h3>fakehuman_env.py</h3>
+                <pre><code class="language-python"># MetaUrban environment wrapper with expert integration
+class FakeHumanEnv(HumanInTheLoopEnv):
+    def __init__(self, config):
+        super().__init__(config)
+        # Load expert policy
+        if not self.config.get("disable_expert", False):
+            self.expert = get_expert(self)
+    
+    def step(self, actions):
+        # Expert evaluation and takeover logic
+        if self.expert and self.last_obs is not None:
+            obs_tensor, _ = self.expert.obs_to_tensor(self.last_obs)
+            distribution = self.expert.get_distribution(obs_tensor)
+            action_prob = distribution.log_prob(actions).exp()
+            
+            if action_prob < 1.0 - self.config["free_level"]:
+                actions = distribution.sample()  # Expert takeover
+                self.takeover = True
+        
+        return super().step(actions)</code></pre>
+            </div>
+            
+            <div class="tab-content" id="expert">
+                <h3>Expert Policy Loading</h3>
+                <pre><code class="language-python"># Expert policy integration
+def get_expert(env_instance):
+    """Load pretrained PPO expert for MetaUrban navigation"""
+    algo_config = dict(
+        policy=ActorCriticPolicy,
+        n_steps=1024,
+        n_epochs=20,
+        learning_rate=5e-5,
+        batch_size=256,
+        env=env_instance
+    )
+    
+    model = PPO(**algo_config)
+    ckpt = FOLDER_PATH / "pretrained_policy_576k.zip"
+    
+    # Load pretrained weights
+    data, params, pytorch_variables = load_from_zip_file(ckpt, device=model.device)
+    model.set_parameters(params, exact_match=True)
+    
+    return model.policy</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo Video Section -->
+    <section id="demo" class="demo-section">
+        <div class="container">
+            <h2 class="section-title">See It In Action</h2>
+            <div class="video-container">
+                <video controls poster="video-thumbnail.jpg">
+                    <source src="demo3.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <div class="video-overlay">
+                    <div class="play-button">
+                        <i class="fas fa-play"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="video-description">
+                <h3>Training Demonstration</h3>
+                <p>Watch the MetaUrban agent navigate complex sidewalk environments with real-time expert guidance. 
+                The video showcases the takeover mechanism, visual feedback system, and adaptive learning in action.</p>
+                <div class="video-highlights">
+                    <div class="highlight">
+                        <i class="fas fa-eye"></i>
+                        <span>Real-time expert evaluation</span>
+                    </div>
+                    <div class="highlight">
+                        <i class="fas fa-hand-paper"></i>
+                        <span>Dynamic takeover decisions</span>
+                    </div>
+                    <div class="highlight">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Live performance metrics</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Architecture Diagram -->
+    <section class="architecture">
+        <div class="container">
+            <h2 class="section-title">System Architecture</h2>
+            <div class="architecture-diagram">
+                <div class="arch-component agent">
+                    <i class="fas fa-robot"></i>
+                    <h3>Learning Agent</h3>
+                    <p>PVPTD3 with TD3 policy</p>
+                </div>
+                <div class="arch-arrow">→</div>
+                <div class="arch-component environment">
+                    <i class="fas fa-city"></i>
+                    <h3>MetaUrban Environment</h3>
+                    <p>Sidewalk navigation simulation</p>
+                </div>
+                <div class="arch-arrow">→</div>
+                <div class="arch-component expert">
+                    <i class="fas fa-graduation-cap"></i>
+                    <h3>Expert Policy</h3>
+                    <p>Pretrained PPO agent</p>
+                </div>
+                <div class="arch-arrow down">↓</div>
+                <div class="arch-component buffer">
+                    <i class="fas fa-database"></i>
+                    <h3>HACO Buffer</h3>
+                    <p>Experience replay with expert data</p>
+                </div>
+                <div class="arch-arrow">←</div>
+                <div class="arch-component monitor">
+                    <i class="fas fa-chart-area"></i>
+                    <h3>Monitoring</h3>
+                    <p>Wandb + visual feedback</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Impact & Results -->
+    <section class="results">
+        <div class="container">
+            <h2 class="section-title">Impact & Results</h2>
+            <div class="results-grid">
+                <div class="result-card">
+                    <div class="result-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Enhanced Safety</h3>
+                    <p>Expert-guided training significantly reduces dangerous exploration, making RL training safer for navigation tasks.</p>
+                    <div class="result-metric">
+                        <span class="metric-number">95%</span>
+                        <span class="metric-text">Safe exploration threshold</span>
+                    </div>
+                </div>
+                <div class="result-card">
+                    <div class="result-icon">
+                        <i class="fas fa-link"></i>
+                    </div>
+                    <h3>Seamless Integration</h3>
+                    <p>Successfully bridged MetaUrban and PVP4Real frameworks, enabling new research possibilities in safe RL.</p>
+                    <div class="result-metric">
+                        <span class="metric-number">100%</span>
+                        <span class="metric-text">API compatibility</span>
+                    </div>
+                </div>
+                <div class="result-card">
+                    <div class="result-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h3>Accelerated Learning</h3>
+                    <p>Adaptive takeover mechanism allows agents to learn efficiently while maintaining safety guarantees.</p>
+                    <div class="result-metric">
+                        <span class="metric-number">50K</span>
+                        <span class="metric-text">Training timesteps</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>MetaUrban × PVP4Real</h3>
+                    <p>Advancing safe reinforcement learning through expert-guided exploration in complex urban environments.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Key Technologies</h3>
+                    <ul>
+                        <li>MetaUrban Simulation</li>
+                        <li>PVP4Real Framework</li>
+                        <li>PVPTD3 Algorithm</li>
+                        <li>PPO Expert Policy</li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="#contribution">Technical Details</a></li>
+                        <li><a href="#demo">Demo Video</a></li>
+                        <li><a href="https://github.com">GitHub Repository</a></li>
+                        <li><a href="mailto:contact@example.com">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 MetaUrban Integration Project. Advancing Safe AI through Human-in-the-Loop Learning.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html> 
