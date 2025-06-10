@@ -21,8 +21,6 @@ Compared to [PVP repo](https://metadriverse.github.io/pvp/), we include the simu
 
 ## Installation
 
-TODO: `pvp4real` uses Python 3.7, but MetaUrban uses Python 3.9. Do I need to use 3.9 for MetaUrban integration?
-
 ```bash
 # Clone the code to local machine
 git clone https://github.com/pengzhenghao/pvp4real
@@ -40,18 +38,13 @@ pip install -e .
 pip install torch
 
 # Install MetaDrive
-# In case you need it, the MetaDrive commit we ran on is: c29cc37d30158fe70d963647b6c80dc814248f60
-# Using latest MetaDrive should work:
 pip install git+https://github.com/metadriverse/metadrive.git
-
-# Install MetaUrbanw with ORCA (necessary for MetaUrban's expert policy)
-
-
 ```
 
 Also, install MetaUrban in a separate directory *outside of this project*. You must install from source to use MetaUrban's expert policy (as it requires ORCA for trajectory generation).
 
 ```bash
+# Install MetaUrban with ORCA (necessary for MetaUrban's expert policy)
 git clone -b main --depth 1 https://github.com/metadriverse/metaurban.git
 cd metaurban
 pip install -e .
@@ -61,7 +54,7 @@ bash compile.sh && cd ../..
 pip install stable_baselines3 imitation tensorboard wandb scikit-image pyyaml gdown
 ```
 
-If you encounter an error when running MetaUrban that your environment using an outdated `libstdc++.so.6` which doesn't support the required `GLIBCXX_3.4.32` symbol version, you can try to update `libstdc++` via `conda` by running:
+If you encounter an error when running MetaUrban on Linux that your environment using an outdated `libstdc++.so.6` which doesn't support the required `GLIBCXX_3.4.32` symbol version, you can try to update `libstdc++` via `conda` by running:
 
 ```bash
 conda install -n pvp4real libstdcxx-ng=12.2.0
